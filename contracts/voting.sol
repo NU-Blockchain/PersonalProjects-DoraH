@@ -26,12 +26,9 @@ contract Voting{
         ProposalsRegistrationStarted,
         ProposalsRegistrationEnded,
         VotingSessionStarted,
-
         VotingSessionEnded,
         VotesTallied
     }
-
-    // TODO: constractor
 
     // this modifier checks the caller is the administrator
     modifier onlyAdministrator() {
@@ -45,9 +42,21 @@ contract Voting{
         _;
     }
 
-    // this modifier checks the proposal registration is active
+    // this modifier checks the voter registration is active
     modifier onlyDuringVotersRegistration() {
-        require(workflowStatus==WorkflowStatus.RegisteringVoters, "Only call this function when registering proposals");
+        require(workflowStatus==WorkflowStatus.RegisteringVoters, "Only call this function when registering voters");
+        _;
+    }
+
+    // this modifier checks the proposal registration is active
+    modifier onlyDuringProposalRegistration() {
+        require(workflowStatus==WorkflowStatus.ProposalsRegistrationStarted, "Only call this function when registering proposals");
+        _;
+    }
+
+    // this modifier checks the proposal registration period has ended 
+    modifier onlyAfterProposalRegistration() {
+        require(workflowStatus==WorkflowStatus.ProposalsRegistrationEnded, "only call this function after proposal registration ended");
         _;
     }
 
