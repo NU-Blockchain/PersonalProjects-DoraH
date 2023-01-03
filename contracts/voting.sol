@@ -60,4 +60,35 @@ contract Voting{
         _;
     }
 
+    modifier onlyDuringVotingSession() {
+        require(workflowStatus==WorkflowStatus.VotingSessionStarted, "only call this function after voting session started");
+        _;
+    }
+
+    modifier onlyAfterVotingSession() {
+        require(workflowStatus==WorkflowStatus.VotingSessionEnded, "only call this function after voting session ended");
+        _;
+    }
+
+    modifier onlyAfterVotesTallied() {
+        require(workflowStatus==WorkflowStatus.VotesTallied, "only call this function after votes were tallied");
+        _;
+    }
+
+    event VoterRegisteredEvent (address voterAddress); 
+    event ProposalsRegistrationStartedEvent ();
+    event ProposalsRegistrationEndedEvent ();
+    event ProposalRegisteredEvent(uint proposalId);
+    event VotingSessionStartedEvent ();
+    event VotingSessionEndedEvent ();
+    event VotedEvent (address voter, uint proposalId);
+    event VotesTalliedEvent ();
+
+    event WorkflowStatusChangeEvent (
+        WorkflowStatus previousStatus,
+        WorkflowStatus newStatus
+    );
+
+
+
 }
